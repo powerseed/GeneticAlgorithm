@@ -10,13 +10,7 @@ impl Network {
     }
     pub fn propagate(&self) -> ! {
         self.layers.windows(2).map(|two_layers| {
-            for (index, neuron_in_prev_layer) in two_layers[0].neurons.iter().enumerate() {
-                two_layers[1].neurons
-                    .iter()
-                    .for_each(|mut neuron_in_next_layer| {
-                        neuron_in_next_layer.receive(neuron_in_prev_layer.value, index)
-                    })
-            }
+            two_layers[0].propagate(&two_layers[1]);
         })
     }
 }
@@ -27,6 +21,15 @@ impl Layer {
     pub fn new(neurons: Vec<Neuron>) -> Self {
         Self {
             neurons
+        }
+    }
+    pub fn propagate(&self, next_layer: &Layer) {
+        for (index, neuron) in self.neurons.iter().enumerate() {
+            next_layer.neurons
+                .iter()
+                .for_each(|mut neuron_in_next_layer| {
+                    neuron.propagate(index, &mut neuron_in_next_layer);
+                })
         }
     }
 }
@@ -47,8 +50,8 @@ impl Neuron {
             value: 0.0
         }
     }
-    pub fn receive(&mut self, prev_value: f32, prev_index: usize) {
-        let output = prev_value * self.weights[prev_index];
-        self.value = (output + self.bias).max(0.0);
+    pub fn propagate(&self, index: usize, next_neuron: &mut Neuron) {
+        let output = self.value * next_neuron.weights[index];
+        next_neuron.value = (output + next_neuron.bias).max(0.0);
     }
 }
