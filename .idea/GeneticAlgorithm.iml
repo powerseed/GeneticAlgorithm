@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/libs/neural-network/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/libs/genetic-algorithm/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/libs/simulation-wasm/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/libs/simulation/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
