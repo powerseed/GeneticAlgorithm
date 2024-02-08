@@ -1,52 +1,75 @@
-use rand::{Rng, RngCore};
+use rand::prelude::ThreadRng;
+use rand::thread_rng;
 use serde::Serialize;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
+use lib_simulation;
+
+#[wasm_bindgen]
+pub struct Simulation {
+    rng: ThreadRng,
+    sim: lib_simulation::Simulation
+}
+
+#[wasm_bindgen]
+impl Simulation {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Self {
+        let mut rng = thread_rng();
+        let sim = lib_simulation::Simulation::random(&mut rng);
+
+        Self { rng, sim }
+    }
+
+    pub fn get_world(&self) -> JsValue {
+        let world = World::from(self.sim.get_world());
+        JsValue::from_serde(&world).unwrap()
+    }
+
+    pub fn step(&mut self) {
+        let mut rng = thread_rng();
+        self.sim.step(&mut rng);
+    }
+}
 #[derive(Serialize)]
 pub struct World {
-    birds: Vec<Bird>,
-    foods: Vec<Food>
+    pub birds: Vec<Bird>,
+    pub foods: Vec<Food>
 }
-impl World {
-    pub fn new() -> Self {
-        let mut rng = rand::thread_rng();
-
-        let birds = (0..10).map(|_| Bird::new(&mut rng)).collect();
-        let foods = (0..20).map(|_| Food::new(&mut rng)).collect();
-
+impl From<&lib_simulation::World> for World {
+    fn from(source: &lib_simulation::World) -> Self {
         Self {
-            birds,
-            foods
+            birds: source.get_birds().iter().map(|bird| Bird::from(bird)).collect(),
+            foods: source.get_foods().iter().map(|food| Food::from(food)).collect()
         }
     }
 }
 #[derive(Serialize)]
 pub struct Bird {
-    position: nalgebra::Point2<f32>,
-    rotation: f32,
-    speed: f32
+    pub x: f32,
+    pub y: f32,
+    pub rotation: f32
 }
-impl Bird {
-    pub fn new(rng: &mut dyn RngCore) -> Self {
+impl From<&lib_simulation::Bird> for Bird {
+    fn from(source: &lib_simulation::Bird) -> Self {
         Self {
-            position: rng.gen(),
-            rotation: rng.gen::<nalgebra::Rotation2<f32>>().angle(),
-            speed: rng.gen()
+            x: source.get_position().x,
+            y: source.get_position().y,
+            rotation: source.get_rotation().angle()
         }
     }
 }
 #[derive(Serialize)]
 pub struct Food {
-    position: nalgebra::Point2<f32>
+    pub x: f32,
+    pub y: f32
 }
-impl Food {
-    pub fn new(rng: &mut dyn RngCore) -> Self {
+
+impl From<&lib_simulation::Food> for Food {
+    fn from(source: &lib_simulation::Food) -> Self {
         Self {
-            position: rng.gen()
+            x: source.get_position().x,
+            y: source.get_position().y
         }
     }
-}
-#[wasm_bindgen]
-pub fn create_new_world() -> Result<JsValue, JsValue> {
-    Ok(serde_wasm_bindgen::to_value(&World::new())?)
 }
