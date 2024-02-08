@@ -1,4 +1,4 @@
-workspace = { members = [ "libs/genetic-algorithm","libs/neural-network", "libs/simulation", "libs/simulation-wasm"] }
+workspace = { members = [ "libs/genetic-algorithm","libs/neural-network", "libs/simulation-wasm"] }
 [package]
 name = "GeneticAlgorithm"
 version = "0.1.0"
