@@ -36,8 +36,8 @@ pub struct World {
     pub birds: Vec<Bird>,
     pub foods: Vec<Food>
 }
-impl From<&lib_simulation::World> for World {
-    fn from(source: &lib_simulation::World) -> Self {
+impl From<&lib_simulation::world::World> for World {
+    fn from(source: &lib_simulation::world::World) -> Self {
         Self {
             birds: source.get_birds().iter().map(|bird| Bird::from(bird)).collect(),
             foods: source.get_foods().iter().map(|food| Food::from(food)).collect()
@@ -50,8 +50,8 @@ pub struct Bird {
     pub y: f32,
     pub rotation: f32
 }
-impl From<&lib_simulation::Bird> for Bird {
-    fn from(source: &lib_simulation::Bird) -> Self {
+impl From<&lib_simulation::bird::Bird> for Bird {
+    fn from(source: &lib_simulation::bird::Bird) -> Self {
         Self {
             x: source.get_position().x,
             y: source.get_position().y,
@@ -65,8 +65,8 @@ pub struct Food {
     pub y: f32
 }
 
-impl From<&lib_simulation::Food> for Food {
-    fn from(source: &lib_simulation::Food) -> Self {
+impl From<&lib_simulation::food::Food> for Food {
+    fn from(source: &lib_simulation::food::Food) -> Self {
         Self {
             x: source.get_position().x,
             y: source.get_position().y
