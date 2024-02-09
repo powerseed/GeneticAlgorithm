@@ -1,6 +1,7 @@
 pub mod world;
 pub mod food;
 pub mod bird;
+mod eye;
 
 use rand::{Rng, RngCore};
 use crate::world::World;
