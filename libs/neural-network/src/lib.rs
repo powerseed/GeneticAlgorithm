@@ -7,7 +7,7 @@ pub struct Network {
     layers: Vec<layer::Layer>
 }
 impl Network {
-    pub fn random(neurons_per_layer: Vec<i32>) -> Self {
+    pub fn random(neurons_per_layer: Vec<usize>) -> Self {
         let layers = neurons_per_layer.windows(2).map(|counts| {
             layer::Layer::random(counts[0], counts[1])
         }).collect();

@@ -5,7 +5,7 @@ pub struct Neuron {
     weights: Vec<f32>
 }
 impl Neuron {
-    pub fn random(input_count: i32) -> Self {
+    pub fn random(input_count: usize) -> Self {
         let mut rng = thread_rng();
         let bias = rng.gen_range(-1.0..=1.0);
         let weights = (0..input_count).map(|_| rng.gen_range(-1.0..=1.0)).collect();

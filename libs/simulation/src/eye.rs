@@ -1,12 +1,30 @@
 use std::f32::consts::PI;
 use crate::food::Food;
+
+static FOV_RANGE: f32 = 0.25;
+static FOV_ANGLE: f32 = PI * 0.75;
+static CELL_COUNT: usize = 9;
+
 pub struct Eye {
     fov_range: f32,
     fov_angle: f32,
     cell_count: usize
 }
-
 impl Eye {
+    pub fn new(fov_range: f32, fov_angle:f32, cell_count: usize) -> Self {
+        Self {
+            fov_range,
+            fov_angle,
+            cell_count
+        }
+    }
+    pub fn default() -> Self {
+        Self::new(FOV_RANGE, FOV_ANGLE, CELL_COUNT)
+    }
+
+    pub fn get_cell_count(&self) -> usize {
+        self.cell_count
+    }
     pub fn see_foods(&self, bird_position: nalgebra::Point2<f32>, bird_rotation: nalgebra::Rotation2<f32>, foods: &[Food]) -> Vec<f32> {
         let mut cell_list = vec![0.0; self.cell_count];
 

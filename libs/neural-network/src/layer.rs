@@ -4,7 +4,7 @@ pub struct Layer {
     neurons: Vec<neuron::Neuron>
 }
 impl Layer {
-    pub fn random(input_count: i32, neuron_count: i32) -> Self {
+    pub fn random(input_count: usize, neuron_count: usize) -> Self {
         let neurons = (0..neuron_count).map(|_| neuron::Neuron::random(input_count)).collect();
         Self {
             neurons
