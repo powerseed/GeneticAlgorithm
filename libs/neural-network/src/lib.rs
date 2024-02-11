@@ -2,26 +2,23 @@ mod layer;
 mod neuron;
 
 use std::iter::once;
-use rand::prelude::*;
 use crate::layer::Layer;
 
 pub struct Network {
-    layers: Vec<layer::Layer>
+    layers: Vec<Layer>
 }
 impl Network {
     pub fn random(eye_cell_count: usize) -> Self {
         let neurons_per_layer = vec![eye_cell_count, 2 * eye_cell_count, 2];
+
         let layers = neurons_per_layer
             .windows(2)
-            .map(|counts| {
-                layer::Layer::random(counts[0], counts[1])
-            })
+            .map(|counts| Layer::random(counts[0], counts[1]))
             .collect();
 
-        Self {
-            layers
-        }
+        Self { layers }
     }
+
     pub fn propagate(&self, inputs: Vec<f32>) -> Vec<f32> {
         self.layers.iter().fold(inputs, |inputs, layer| layer.propagate(inputs))
     }
@@ -39,9 +36,7 @@ impl Network {
 
         let layers = neuron_count_in_each_layer
             .windows(2)
-            .map(|neuron_counts| {
-                Layer::from_weights(neuron_counts[0], neuron_counts[1], &mut weights)
-            })
+            .map(|neuron_counts| Layer::from_weights(neuron_counts[0], neuron_counts[1], &mut weights))
             .collect();
 
         Self {

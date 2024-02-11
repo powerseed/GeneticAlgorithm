@@ -4,18 +4,17 @@ pub mod bird;
 mod eye;
 mod bird_individual;
 
-use nalgebra::wrap;
 use rand::{Rng, RngCore};
 use crate::world::World;
 use genetic_algorithm;
 use crate::bird_individual::BirdIndividual;
 
-const SPEED_MAX: f32 = 0.003;
+const SPEED_MAX: f32 = 0.005;
 const SPEED_MIN:f32 = 0.001;
-const SPEED_ACCELERATION_MAX:f32 = 0.0005;
+const SPEED_ACCELERATION_MAX:f32 = 0.001;
 const ROTATION_ACCELERATION_MAX:f32 = std::f32::consts::FRAC_PI_2;
-
 const BIRD_LIFESPAN_IN_STEP: usize = 2500;
+
 pub struct Simulation {
     world: World,
     genetic_algorithm: genetic_algorithm::GeneticAlgorithm,
@@ -26,8 +25,8 @@ impl Simulation {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         Self {
             world: World::random(rng),
-            steps_completed: 0,
-            genetic_algorithm: genetic_algorithm::GeneticAlgorithm::new()
+            genetic_algorithm: genetic_algorithm::GeneticAlgorithm::new(),
+            steps_completed: 0
         }
     }
 
@@ -68,8 +67,8 @@ impl Simulation {
         self.steps_completed += 1;
 
         // generate the next generation.
-        if (self.steps_completed > BIRD_LIFESPAN_IN_STEP) {
-            self.evolve(rng);
+        if self.steps_completed > BIRD_LIFESPAN_IN_STEP {
+           self.evolve(rng);
         }
     }
 
@@ -85,9 +84,7 @@ impl Simulation {
 
         self.world.birds = bird_individuals
             .into_iter()
-            .map(|bird_individual| {
-                bird_individual.to_bird(rng)
-            })
+            .map(|bird_individual| bird_individual.to_bird(rng))
             .collect();
     }
 }

@@ -1,4 +1,4 @@
-use rand::{RngCore, thread_rng};
+use rand::{RngCore};
 use genetic_algorithm::Individual;
 use crate::bird::Bird;
 

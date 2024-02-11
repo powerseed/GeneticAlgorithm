@@ -1,5 +1,4 @@
 use rand::{Rng, RngCore};
-use crate::eye;
 use neural_network;
 use neural_network::Network;
 use crate::eye::Eye;
@@ -8,8 +7,8 @@ pub struct Bird {
     pub(crate) position: nalgebra::Point2<f32>,
     pub(crate) rotation: nalgebra::Rotation2<f32>,
     pub(crate) speed: f32,
-    pub(crate) eye: eye::Eye,
-    pub(crate) brain: neural_network::Network,
+    pub(crate) eye: Eye,
+    pub(crate) brain: Network,
     pub(crate) foods_eaten_count: usize
 }
 

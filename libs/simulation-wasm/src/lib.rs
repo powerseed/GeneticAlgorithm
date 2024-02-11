@@ -1,4 +1,3 @@
-use rand::prelude::ThreadRng;
 use rand::thread_rng;
 use serde::Serialize;
 use wasm_bindgen::JsValue;
@@ -7,7 +6,6 @@ use lib_simulation;
 
 #[wasm_bindgen]
 pub struct Simulation {
-    rng: ThreadRng,
     sim: lib_simulation::Simulation
 }
 
@@ -18,7 +16,7 @@ impl Simulation {
         let mut rng = thread_rng();
         let sim = lib_simulation::Simulation::random(&mut rng);
 
-        Self { rng, sim }
+        Self { sim }
     }
 
     pub fn get_world(&self) -> JsValue {
