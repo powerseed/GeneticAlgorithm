@@ -10,6 +10,8 @@
       <sourceFolder url="file://$MODULE_DIR$/libs/simulation-123/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/libs/simulation-implementation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/libs/simulation/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/libs/simulation/src/bird_individual/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/libs/simulation/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -9,3 +9,4 @@ edition = "2021"
 nalgebra = { version = "0.32.3", features = ["rand-no-std"] }
 rand = "0.8.5"
 neural-network = { path = "../neural-network" }
+genetic-algorithm = {path = "../genetic-algorithm"}

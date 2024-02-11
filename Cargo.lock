@@ -78,6 +78,7 @@ dependencies = [
 name = "lib-simulation"
 version = "0.1.0"
 dependencies = [
+ "genetic-algorithm",
  "nalgebra",
  "neural-network",
  "rand",

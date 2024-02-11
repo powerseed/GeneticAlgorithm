@@ -2,24 +2,32 @@ pub mod world;
 pub mod food;
 pub mod bird;
 mod eye;
+mod bird_individual;
 
 use nalgebra::wrap;
 use rand::{Rng, RngCore};
 use crate::world::World;
+use genetic_algorithm;
+use crate::bird_individual::BirdIndividual;
 
 const SPEED_MAX: f32 = 0.003;
 const SPEED_MIN:f32 = 0.001;
 const SPEED_ACCELERATION_MAX:f32 = 0.0005;
 const ROTATION_ACCELERATION_MAX:f32 = std::f32::consts::FRAC_PI_2;
 
+const BIRD_LIFESPAN_IN_STEP: usize = 2500;
 pub struct Simulation {
-    world: World
+    world: World,
+    genetic_algorithm: genetic_algorithm::GeneticAlgorithm,
+    steps_completed: usize
 }
 
 impl Simulation {
     pub fn random(rng: &mut dyn RngCore) -> Self {
         Self {
-            world: World::random(rng)
+            world: World::random(rng),
+            steps_completed: 0,
+            genetic_algorithm: genetic_algorithm::GeneticAlgorithm::new()
         }
     }
 
@@ -40,6 +48,7 @@ impl Simulation {
             for food in &mut self.world.foods {
                 let distance = nalgebra::distance(&bird.position, &food.position);
                 if distance < 0.02 {
+                    bird.foods_eaten_count += 1;
                     food.position = rng.gen();
                 }
             }
@@ -55,5 +64,30 @@ impl Simulation {
             bird.speed = (bird.speed + speed_delta).clamp(SPEED_MIN, SPEED_MAX);
             bird.rotation = nalgebra::Rotation2::new(bird.rotation.angle() + rotation_delta);
         }
+
+        self.steps_completed += 1;
+
+        // generate the next generation.
+        if (self.steps_completed > BIRD_LIFESPAN_IN_STEP) {
+            self.evolve(rng);
+        }
+    }
+
+    pub fn evolve(&mut self, rng: &mut dyn RngCore) {
+        self.steps_completed = 0;
+
+        let bird_individuals: Vec<BirdIndividual> = self.world.birds
+            .iter()
+            .map(BirdIndividual::from_bird)
+            .collect();
+
+        let bird_individuals = self.genetic_algorithm.evolve(rng, &bird_individuals);
+
+        self.world.birds = bird_individuals
+            .into_iter()
+            .map(|bird_individual| {
+                bird_individual.to_bird(rng)
+            })
+            .collect();
     }
 }

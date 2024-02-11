@@ -1,8 +1,8 @@
 use rand::{Rng, thread_rng};
 
 pub struct Neuron {
-    bias: f32,
-    weights: Vec<f32>
+    pub bias: f32,
+    pub weights: Vec<f32>
 }
 impl Neuron {
     pub fn random(input_count: usize) -> Self {
@@ -12,6 +12,15 @@ impl Neuron {
         Self {
             bias,
             weights
+        }
+    }
+    pub fn from_weights(input_count: usize, weights: &mut dyn Iterator<Item = f32>) -> Self
+    {
+        Self {
+            bias: weights.next().expect("Not enough weights. "),
+            weights: (0..input_count).map(|_| {
+                weights.next().expect("Not enough weights. ")
+            }).collect()
         }
     }
     pub fn propagate(&self, inputs: &Vec<f32> ) -> f32 {
